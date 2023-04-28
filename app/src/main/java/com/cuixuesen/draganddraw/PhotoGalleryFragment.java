@@ -116,4 +116,17 @@ public class PhotoGalleryFragment extends Fragment {
             setupAdapter();
         }
     }
+
+//    private RecyclerView.OnScrollListener onBottomListener = new RecyclerView.OnScrollListener() {
+//        @Override
+//        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//            super.onScrollStateChanged(recyclerView, newState);
+//            GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+//        }
+//
+//        @Override
+//        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//            super.onScrolled(recyclerView, dx, dy);
+//        }
+//    }
 }
