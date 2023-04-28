@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BeatBoxButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@color/red</item>
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
+        <item name="colorAccent">@color/gray</item>
+    </style>
+    <style name="BeatBoxButton" parent="android:Widget.Holo.Button">
+        <item name="android:background">@drawable/button_beat_box</item>
     </style>
     <style name="BeatBoxButton.Strong">
 <!--    <style name="StrongBeatBoxButton" parent="@style/BeatBoxButton">-->
