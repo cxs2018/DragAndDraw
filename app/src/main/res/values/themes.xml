@@ -11,6 +11,10 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="buttonStyle">@style/BeatBoxButton</item>
         <!-- Customize your theme here. -->
+
+<!--        <item name="android:windowBackground">@color/soothing_blue</item>-->
     </style>
 </resources>
