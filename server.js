@@ -15,7 +15,7 @@ http.createServer(function (request, response) {
     response.writeHead(200, {'Content-Type': 'text/plain'});
 
 
-    if (request.url === '/?method=flickr.photos.getRecent') {
+    if (request.url.includes('/?method=flickr.photos.getRecent')) {
         response.end(JSON.stringify(json));
     } else {
     // 发送响应数据 "Hello World"

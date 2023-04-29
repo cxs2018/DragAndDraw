@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,12 @@ public class PhotoGalleryFragment extends Fragment {
 
     private List<GalleryItem> mItems = new ArrayList<>();
 
+    private int mNextPage = 1, mLastPosition;
+    private final int MAX_PLACES = 3;
+
+    private PhotoAdapter mPhotoAdapter;
+    private FetchItemsTask mFetchItemsTask;
+
     public static PhotoGalleryFragment newInstance() {
         return new PhotoGalleryFragment();
     }
@@ -35,7 +43,8 @@ public class PhotoGalleryFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchItemsTask().execute();
+        mFetchItemsTask = new FetchItemsTask();
+        mFetchItemsTask.execute();
     }
 
     @Nullable
@@ -44,16 +53,39 @@ public class PhotoGalleryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
 
         mPhotoRecyclerView = (RecyclerView) v.findViewById(R.id.photo_recycler_view);
-        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+//        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+
+        // 挑战练习：添加动态调整网格
+        mPhotoRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Log.i(TAG, "onGlobalLayout: " + mPhotoRecyclerView.getWidth() + mLastPosition);
+                int columns = mPhotoRecyclerView.getWidth() / 240;
+                mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columns));
+                mPhotoRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                mPhotoRecyclerView.setAdapter(new PhotoAdapter(mItems));
+                mPhotoRecyclerView.addOnScrollListener(onBottomListener);
+                mPhotoRecyclerView.getLayoutManager().scrollToPosition(mLastPosition);
+            }
+        });
+
+        mPhotoRecyclerView.setOnScrollListener(onBottomListener);
 
         setupAdapter();
 
         return v;
     }
 
+    private void updateItems() {
+        mFetchItemsTask = new FetchItemsTask();
+        mFetchItemsTask.execute();
+    }
+
     private void setupAdapter() {
         if (isAdded()) {
-            mPhotoRecyclerView.setAdapter(new PhotoAdapter(mItems));
+            mPhotoAdapter = new PhotoAdapter(mItems);
+            mPhotoRecyclerView.setAdapter(mPhotoAdapter);
         }
     }
 
@@ -98,7 +130,6 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private class FetchItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
-
         @Override
         protected List<GalleryItem> doInBackground(Void... voids) {
 //            try {
@@ -107,26 +138,42 @@ public class PhotoGalleryFragment extends Fragment {
 //            } catch (IOException e) {
 //                Log.e(TAG, "doInBackground: Failed to fetch URL: " + e );
 //            }
-            return new FlickrFetchr().fetchItems();
+            return new FlickrFetchr().fetchItems(mNextPage);
         }
 
         @Override
         protected void onPostExecute(List<GalleryItem> galleryItems) {
-            mItems = galleryItems;
+            mItems.addAll(galleryItems);
             setupAdapter();
         }
     }
 
-//    private RecyclerView.OnScrollListener onBottomListener = new RecyclerView.OnScrollListener() {
-//        @Override
-//        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//            super.onScrollStateChanged(recyclerView, newState);
-//            GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-//        }
-//
-//        @Override
-//        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//            super.onScrolled(recyclerView, dx, dy);
-//        }
-//    }
+    // 挑战练习：分页加载
+    private RecyclerView.OnScrollListener onBottomListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+            mLastPosition = layoutManager.findLastVisibleItemPosition();
+            if (mPhotoAdapter == null) {
+                return;
+            }
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastPosition >= mPhotoAdapter.getItemCount() - 1) {
+                if (mFetchItemsTask.getStatus() == AsyncTask.Status.FINISHED) {
+                    mNextPage++;
+                    if (mNextPage <= MAX_PLACES) {
+                        Toast.makeText(getActivity(), "waiting to load...", Toast.LENGTH_SHORT).show();
+                        updateItems();
+                    } else {
+                        Toast.makeText(getActivity(), "This is the end.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 }
