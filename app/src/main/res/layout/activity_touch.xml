@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.cuixuesen.draganddraw.touchEvent.ViewGroup1
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray">
+    <com.cuixuesen.draganddraw.touchEvent.ViewGroup2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="50dp"
+        android:background="@color/dark_red">
+        <com.cuixuesen.draganddraw.touchEvent.ViewGroup3
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="50dp"
+            android:background="@color/blue_sky" />
+    </com.cuixuesen.draganddraw.touchEvent.ViewGroup2>
+</com.cuixuesen.draganddraw.touchEvent.ViewGroup1>
+</androidx.constraintlayout.widget.ConstraintLayout>
