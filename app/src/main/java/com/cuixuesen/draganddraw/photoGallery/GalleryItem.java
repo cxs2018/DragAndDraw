@@ -1,4 +1,4 @@
-package com.cuixuesen.draganddraw;
+package com.cuixuesen.draganddraw.photoGallery;
 
 public class GalleryItem {
     private String mCaption;

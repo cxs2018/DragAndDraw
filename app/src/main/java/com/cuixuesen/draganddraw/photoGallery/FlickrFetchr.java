@@ -1,4 +1,4 @@
-package com.cuixuesen.draganddraw;
+package com.cuixuesen.draganddraw.photoGallery;
 
 import android.net.Uri;
 import android.util.Log;
@@ -52,13 +52,15 @@ public class FlickrFetchr {
         List<GalleryItem> items = new ArrayList<>();
 
         try {
-            String url = Uri.parse("http://192.168.1.7:8080")
+            // "https://api.flickr.com/services/rest/"
+            // https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=8c58614a37b6e585abe6c233d17b7dc3&format=json&nojsoncallback=1&extras=url_s&page=1
+            String url = Uri.parse("http://10.220.166.107:8080")
                     .buildUpon()
                     .appendQueryParameter("method", "flickr.photos.getRecent")
-//                    .appendQueryParameter("api_key", API_KEY)
-//                    .appendQueryParameter("format", "json")
-//                    .appendQueryParameter("nojsoncallback", "1")
-//                    .appendQueryParameter("extras", "url_s")
+                    .appendQueryParameter("api_key", API_KEY)
+                    .appendQueryParameter("format", "json")
+                    .appendQueryParameter("nojsoncallback", "1")
+                    .appendQueryParameter("extras", "url_s")
                     .appendQueryParameter("page", "" + nextPage)
                     .build().toString();
             Log.i(TAG, "fetchItems: start: " + url);
