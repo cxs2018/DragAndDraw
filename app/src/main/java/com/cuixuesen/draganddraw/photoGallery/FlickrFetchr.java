@@ -20,6 +20,12 @@ public class FlickrFetchr {
 
     private static final String API_KEY = "8c58614a37b6e585abe6c233d17b7dc3";
 
+    /**
+     * 从指定URL获取原始数据并返回一个字节流数组
+     * @param urlSpec
+     * @return
+     * @throws IOException
+     */
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -43,6 +49,12 @@ public class FlickrFetchr {
         }
     }
 
+    /**
+     * 将getUrlBytes(String)方法返回的结果转换为String
+     * @param urlSpec
+     * @return
+     * @throws IOException
+     */
     public String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
