@@ -52,17 +52,21 @@ public class PhotoGalleryFragment extends Fragment {
         mFetchItemsTask.execute();
 
         Handler responseHandler = new Handler();
+        // 创建线程
         mThumbnailDownloader = new ThumbnailDownloader<>(responseHandler);
         mThumbnailDownloader.setThumbnailDownloaderListener(
                 new ThumbnailDownloader.ThumbnailDownloaderListener<PhotoHolder>() {
                     @Override
                     public void onThumbnailDownloaded(PhotoHolder target, Bitmap thumbnail) {
+                        // 用返回的Bitmap执行UI更新操作
                         Drawable drawable = new BitmapDrawable(getResources(), thumbnail);
                         target.bindDrawable(drawable);
                     }
                 }
         );
+        // 启动线程
         mThumbnailDownloader.start();
+        // 要在start方法之后调用getLooper方法，这是一种保证线程就绪的处理方式
         mThumbnailDownloader.getLooper();
         Log.i(TAG, "Background thread started");
     }
@@ -156,6 +160,11 @@ public class PhotoGalleryFragment extends Fragment {
             GalleryItem galleryItem = mGalleryItems.get(position);
             Drawable placeholder = getResources().getDrawable(R.drawable.bill_up_close);
             holder.bindDrawable(placeholder);
+             // 为前十个和后十个预加载
+//            for(int i = Math.max(0, position - 10); i < Math.min(mGalleryItems.size() - 1, position + 10); i++) {
+//                Log.e(TAG, "onBindViewHolder: Preload position " + i);
+//                mThumbnailDownloader.queuePreloadThumbnail(mGalleryItems.get(i).getUrl());
+//            }
             mThumbnailDownloader.queueThumbnail(holder, galleryItem.getUrl());
         }
 
