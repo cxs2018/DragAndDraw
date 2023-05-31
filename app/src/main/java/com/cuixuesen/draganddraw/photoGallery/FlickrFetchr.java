@@ -21,7 +21,7 @@ public class FlickrFetchr {
     private static final String API_KEY = "8c58614a37b6e585abe6c233d17b7dc3";
     private static final String FETCH_RECENTS_METHOD = "flickr.photos.getRecent";
     public static final String SEARCH_METHOD = "flickr.photos.search";
-    private static final Uri ENDPOINT = Uri.parse("http://10.0.2.2:8080")
+    private static final Uri ENDPOINT = Uri.parse("https://api.flickr.com/services/rest")
             .buildUpon()
 //            .appendQueryParameter("method", "flickr.photos.getRecent")
             .appendQueryParameter("api_key", API_KEY)
@@ -137,6 +137,7 @@ public class FlickrFetchr {
             }
 
             item.setUrl(photoJsonObject.getString("url_s"));
+            item.setOwner(photoJsonObject.getString("owner"));
             items.add(item);
         }
     }

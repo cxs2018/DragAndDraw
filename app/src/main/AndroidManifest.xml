@@ -22,6 +22,7 @@
         android:theme="@style/Theme.AppCompat.DayNight"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name=".photoGallery.PhotoPageActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".SingleFragmentActivity"
             android:exported="false">
