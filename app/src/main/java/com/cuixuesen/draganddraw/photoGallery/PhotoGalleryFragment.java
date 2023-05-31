@@ -32,7 +32,7 @@ import com.cuixuesen.draganddraw.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoGalleryFragment extends Fragment {
+public class PhotoGalleryFragment extends VisibleFragment {
     private static final String TAG = "PhotoGalleryFragment";
 
     private RecyclerView mPhotoRecyclerView;
@@ -164,11 +164,11 @@ public class PhotoGalleryFragment extends Fragment {
         });
 
         MenuItem toggleItem = menu.findItem(R.id.menu_item_toggle_polling);
-        if (PollService.isServiceAlarmOn(getActivity())) {
-            toggleItem.setTitle(R.string.stop_polling);
-        } else {
-            toggleItem.setTitle(R.string.start_polling);
-        }
+//        if (PollService.isServiceAlarmOn(getActivity())) {
+//            toggleItem.setTitle(R.string.stop_polling);
+//        } else {
+//            toggleItem.setTitle(R.string.start_polling);
+//        }
     }
 
     @Override
