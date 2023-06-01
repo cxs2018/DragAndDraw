@@ -1,5 +1,6 @@
 package com.cuixuesen.draganddraw.photoGallery;
 
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
@@ -140,5 +141,18 @@ public class FlickrFetchr {
             item.setOwner(photoJsonObject.getString("owner"));
             items.add(item);
         }
+    }
+
+    private String buildUrl(Location location) {
+        return ENDPOINT.buildUpon()
+                .appendQueryParameter("method", SEARCH_METHOD)
+                .appendQueryParameter("lat", "" + location.getLatitude())
+                .appendQueryParameter("lon", "" + location.getLongitude())
+                .build().toString();
+    }
+
+    public List<GalleryItem> searchPhotos(Location location) {
+        String url = buildUrl(location);
+        return downloadGalleryItems(url);
     }
 }
